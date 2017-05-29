@@ -5,22 +5,43 @@
 # Descripcion -> Fichero con la lógica de la aplicación
 
 import os
-import getpass
+import subprocess
+
+def listUsers():
+    print "Listando los usuarios registrados en el sistema"
+    #listaUsuarios = os.system("cat /etc/passwd | grep '/usr/sbin/nologin' | grep home | awk -F ':' {'print $1'}")
+    #users = os.popen("cat /etc/passwd | grep '/usr/sbin/nologin' | grep home | awk -F ':' {'print $1'}").read()
+    users = subprocess.check_output("cat /etc/passwd | grep '/usr/sbin/nologin' | grep home | awk -F ':' {'print $1'}",shell=True)
+    for usuario in users:
+        print usuario
 
 
 # Función para crear un usuario
 def createUser(nombre):
     print "Creación de usuario SFTP"
-    newUser = raw_input("Nombre de usuario >> ")
+    new_user = raw_input("Nombre de usuario >> ")
 
-    homeNewUser = raw_input("Home para el usuario " + newUser + "(relativa a (/app/sftp/) >> ")
+    home_new_user = raw_input("Home para el usuario " + new_user + "(relativa a (/app/sftp/) >> ")
 
-    command = "useradd -d " + "/app/sftp/" + homeNewUser + " -G sftponly -s /usr/sbin/nologin -N " + newUser
-    print "Ejecutando " + command
-    command2 = "passwd " + newUser
+    command = "useradd -d " + "/app/sftp/" + home_new_user + " -G sftponly -s /usr/sbin/nologin -N " + new_user
+    command3 = "mkdir -p -m 700 " + home_new_user
+
 
     try:
+        print "Ejecutando " + command
         os.system(command)
-        os.system("passwd " + newUser)
+        print "Ejecutando " + command3
+        os.system(command3)
+        print "Creando directorio home del nuevo usuario"
+        os.makedirs(home_new_user)
+        uid = os.system("cat /etc/passwd | grep " + new_user + " | awk -F ':' {'print $3'}")
+        gid = os.system("cat /etc/group | grep sftponly | awk -F ':' {'print $3'}")
+        os.chown(home_new_user,int(uid),int(gid))
+        os.chmod(home_new_user,int(700))
+
     except OSError:
         print "Error al crear el usuario"
+
+
+
+listUsers()

@@ -6,9 +6,13 @@
 
 import actions
 
+seleccion = ''
+
 def printMenu():
+
+
     print "################################"
-    print "######### GESTOR SFTP ##########"
+    print "####### GESTOR SFTP ############"
     print "## (c) Plataforma de negocio  ##"
     print "## (c) Dpto. Gestion          ##"
     print "## (c) TELECOR S.A.           ##"
@@ -23,11 +27,17 @@ def printMenu():
     print "5. Crear nuevo usuario SFTP"
     print "6. Crear nuevo usuario DISTRIBUIDOR"
     print "7. Crear nuevo usuario OPERADOR"
+    print "8. Buscar usuario"
+    print "EXIT -> Salir del programa"
     print "\n"
     print "Seleccionar una opción"
     seleccion = raw_input(">>")
 
-printMenu()
+    if (seleccion.lower() == 'exit'):
+        exit(0)
+
+while (seleccion != 'exit'):
+    printMenu()
 
 
 

@@ -7,12 +7,22 @@
 import os
 import subprocess
 
+
+## Funciones de listados ##
+
 # Funcion de listado de usuarios
 def listUsers():
     print "Listando los usuarios registrados en el sistema"
-    print (subprocess.check_output("cat /etc/passwd | grep '/usr/sbin/nologin' | grep home | awk -F ':' {'print $1'}",shell=True))
+    print (subprocess.check_output("cat /etc/passwd | grep '/usr/sbin/nologin' | grep home | awk -F ':' {'print $1'}",
+                                   shell=True))
 
 
+def listGroups():
+    for group in (subprocess.check_output("cat /etc/group | grep sftp", shell=True).split("\n")):
+        print (group.strip().split(":")[0])
+
+
+## Funcionaes de creación de usuarios ##
 
 # Función para crear un usuario
 def createUser(nombre):
@@ -24,7 +34,6 @@ def createUser(nombre):
     command = "useradd -d " + "/app/sftp/" + home_new_user + " -G sftponly -s /usr/sbin/nologin -N " + new_user
     command3 = "mkdir -p -m 700 " + home_new_user
 
-
     try:
         print "Ejecutando " + command
         os.system(command)
@@ -34,12 +43,29 @@ def createUser(nombre):
         os.makedirs(home_new_user)
         uid = os.system("cat /etc/passwd | grep " + new_user + " | awk -F ':' {'print $3'}")
         gid = os.system("cat /etc/group | grep sftponly | awk -F ':' {'print $3'}")
-        os.chown(home_new_user,int(uid),int(gid))
-        os.chmod(home_new_user,int(700))
+        os.chown(home_new_user, int(uid), int(gid))
+        os.chmod(home_new_user, int(700))
 
     except OSError:
         print "Error al crear el usuario"
 
 
+## Funciones de búsqueda ##
 
-listUsers()
+# Función para buscar un usuario
+def findUser(_nombre):
+    nombre = _nombre
+    found = False
+    for user in (
+            subprocess.check_output("cat /etc/passwd | grep '/usr/sbin/nologin' | awk -F ':' {'print $1'}",
+                                    shell=True).split(
+                '\n')):
+        if (user.lower == nombre.lower) and (found == False):
+            found = True
+            print "Se ha encontrado >> " + user
+
+        if (found == False):
+            print "No se ha encontado ningún usuario " + nombre
+
+
+listGroups()

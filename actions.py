@@ -10,7 +10,8 @@ import subprocess
 
 ## Funciones de listados ##
 
-# Funcion de listado de usuarios
+# Funcion de listado de usuarios y grupos
+
 def listUsers():
     print "Listando los usuarios registrados en el sistema"
     print (subprocess.check_output("cat /etc/passwd | grep '/usr/sbin/nologin' | grep home | awk -F ':' {'print $1'}",
@@ -49,6 +50,13 @@ def createUser(nombre):
     except OSError:
         print "Error al crear el usuario"
 
+    print "¿Generar llave RSA para el nuevo usuario?"
+    requiresKEY = 'Y'
+    requiresKEY=raw_input("[Y/n] >> ")
+
+    if requiresKEY == 'Y':
+        print "No hagas nada"
+
 
 ## Funciones de búsqueda ##
 
@@ -68,4 +76,3 @@ def findUser(_nombre):
             print "No se ha encontado ningún usuario " + nombre
 
 
-listGroups()

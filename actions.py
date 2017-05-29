@@ -7,13 +7,11 @@
 import os
 import subprocess
 
+# Funcion de listado de usuarios
 def listUsers():
     print "Listando los usuarios registrados en el sistema"
-    #listaUsuarios = os.system("cat /etc/passwd | grep '/usr/sbin/nologin' | grep home | awk -F ':' {'print $1'}")
-    #users = os.popen("cat /etc/passwd | grep '/usr/sbin/nologin' | grep home | awk -F ':' {'print $1'}").read()
-    users = subprocess.check_output("cat /etc/passwd | grep '/usr/sbin/nologin' | grep home | awk -F ':' {'print $1'}",shell=True)
-    for usuario in users:
-        print usuario
+    print (subprocess.check_output("cat /etc/passwd | grep '/usr/sbin/nologin' | grep home | awk -F ':' {'print $1'}",shell=True))
+
 
 
 # Función para crear un usuario

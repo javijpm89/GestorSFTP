@@ -6,7 +6,7 @@
 
 import os
 import subprocess
-
+import rsagenerator as rsagen
 
 ## Funciones de listados ##
 
@@ -55,7 +55,7 @@ def createUser(nombre):
     requiresKEY=raw_input("[Y/n] >> ")
 
     if requiresKEY == 'Y':
-        print "No hagas nada"
+        rsagen.generateRSAKEY(home_new_user,nombre)
 
 
 ## Funciones de búsqueda ##

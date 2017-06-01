@@ -47,15 +47,17 @@ def createUser(nombre):
         os.chown(home_new_user, int(uid), int(gid))
         os.chmod(home_new_user, int(700))
 
+        print "¿Generar llave RSA para el nuevo usuario?"
+        requiresKEY = 'Y'
+        requiresKEY = raw_input("[Y/n] >> ")
+
+        if requiresKEY == 'Y':
+            rsagen.generateRSAKEY(home_new_user, nombre)
+
     except OSError:
         print "Error al crear el usuario"
 
-    print "¿Generar llave RSA para el nuevo usuario?"
-    requiresKEY = 'Y'
-    requiresKEY=raw_input("[Y/n] >> ")
 
-    if requiresKEY == 'Y':
-        rsagen.generateRSAKEY(home_new_user,nombre)
 
 
 ## Funciones de búsqueda ##

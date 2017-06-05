@@ -67,9 +67,7 @@ def findUser(_nombre):
     nombre = _nombre
     found = False
     for user in (
-            subprocess.check_output("cat /etc/passwd | grep '/usr/sbin/nologin' | awk -F ':' {'print $1'}",
-                                    shell=True).split(
-                '\n')):
+            subprocess.check_output("cat /etc/passwd | grep '/usr/sbin/nologin' | awk -F ':' {'print $1'}",shell=True).split('\n')):
         if (user.lower == nombre.lower) and (found == False):
             found = True
             print "Se ha encontrado >> " + user

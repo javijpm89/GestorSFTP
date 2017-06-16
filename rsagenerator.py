@@ -1,7 +1,7 @@
 import os
 from Crypto.PublicKey import RSA
 
-# Función que genera una llave RSA en el home del usuario
+# Funcion que genera una llave RSA en el home del usuario
 def generateRSAKEY(homeDir, user):
     key = RSA.generate(2048)
     homeSSH = homeDir + '/.ssh'

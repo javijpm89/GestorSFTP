@@ -5,6 +5,8 @@
 # Descripcion -> Fichero de ejecución principal
 
 import actions
+import os
+import thread
 
 seleccion = ''
 
@@ -36,10 +38,32 @@ def printMenu():
     if (seleccion.lower() == 'exit'):
         exit(0)
 
-while (seleccion != 'exit'):
-    printMenu()
+def killproc(pid):
+    print "Killing current process " + str(pid)
+    os.system('kill -9 ' + str(pid))
+
+def rootExecution():
+    os.system('sudo python main.py')
 
 
+def execute():
+    while (seleccion != 'exit'):
+        executionUser = os.getegid()
+
+        executeAsRoot = 'y'
+        if (executionUser != 0):
+            print "Este softwre debe ejecutarse como root"
+            executeAsRoot = raw_input("¿Desea ejecutar el programa como root?[Y/n]")
+            if (executeAsRoot.lower() == 'y'):
+                thread.start_new_thread(rootExecution(),'')
+                thread.start_new_thread(killproc(os.getpid()))
+            else:
+                print "Selección no válida"
+                execute()
+        else:
+            printMenu()
+
+execute()
 
 
 

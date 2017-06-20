@@ -6,7 +6,8 @@
 
 import actions
 import os
-import thread
+import threading
+import time
 
 seleccion = ''
 
@@ -55,15 +56,18 @@ def execute():
             print "Este softwre debe ejecutarse como root"
             executeAsRoot = raw_input("¿Desea ejecutar el programa como root?[Y/n]")
             if (executeAsRoot.lower() == 'y'):
-                thread.start_new_thread(rootExecution(),'')
-                thread.start_new_thread(killproc(os.getpid()))
+                threadSudoStart = threading.Thread(name='Thread Arranque Sudo', target=rootExecution)
+                threadSudoStart.start()
+
             else:
                 print "Selección no válida"
                 execute()
         else:
             printMenu()
 
-execute()
+threadMain = threading.Thread(name='Thread Principal',target=execute())
+threadMain.start()
+
 
 
 
